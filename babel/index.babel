@@ -1,0 +1,239 @@
+//REACT____________________________________________________
+
+//NAVIGATION___________________________________________________
+class Navigation extends React.Component{
+  render() {
+    return(
+      <div id='navbar' >
+        <nav class="stroke">
+           <ul>
+             <li><a href="#collection">Collections</a></li>
+             <li><a href="#">Cart</a></li>
+            </ul>
+            <div id='logo'>THE LOGO</div>
+          </nav>
+       </div>
+    )
+  }
+}
+//-------------------------------------------------------------------------
+
+
+//FOOTER________________________________________________________________
+class Footer extends React.Component{
+  render() {
+    return(
+      <section id='footer'>
+        <div class='stroke'>
+          <ul>
+            <li><a href='#'>ABOUT</a></li>
+            <li><a href='#'>PRIVACY POLICY</a></li>
+            <li><a href='#'>CONTACT</a></li>
+            <div id='copyright'> © year Company Name | All Rights Reserved</div>
+          </ul> 
+        </div>
+      </section>
+    )
+  }
+}
+
+
+//HOME SECTION________________________________________________________________
+class HomePage extends React.Component{
+  render() {
+    return(
+      <section id='home'>
+        <h1><strong>THE <br />BAG <br />STORE</strong></h1>
+          <img id='back-img' src="https://image.ibb.co/gK0dFA/handbag-600398-640.jpg" />
+          <img id='front-img' src="https://image.ibb.co/kher2q/handbag-444171-640.jpg" />
+      </section>
+    )
+  }
+}
+//------------------------------------------------------------------------------
+
+//SECOND SECTION__________________________________________________________________
+class Durability extends React.Component{
+  render() {
+    return(
+      <section id='durability'>
+        <img id='front-img' class='anim slide-left slide' src="https://image.ibb.co/bDEsOV/handbag-2033951-640.jpg" />
+        <img id='back-img' class='anim slide-left' src="https://image.ibb.co/iQWvcq/handbag-2033960-640.jpg" />
+        <div class='information'>
+          <h1>Durable Design</h1>
+          <p>Information about durability.. Could be anything...
+             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+        </div>
+      </section>
+    )
+  }
+}
+//-----------------------------------------------------------------------------------
+
+
+//COLLECTION________________________________________________________________________
+class Collection extends React.Component{
+  render() {
+    return(
+      <section id='collection'>
+         <div class='information'>
+          <h1>Collection</h1>
+          <p>Display Collection ...Information regarding the latest collection....Sample Text
+            </p>
+        </div>
+        <div class='collection'>
+          <div class='container'>
+          <img id='img1' class='anim slide-top' src="https://image.ibb.co/f9OdfA/bag-1853847-640.jpg" />
+            <div class='text-block anim slide-top'>THE OFFICE COLLECTION</div>
+          </div>
+          <div class='container upper'>
+          <img id='img2' class='anim slide-top slide' src="https://image.ibb.co/n1ddfA/leather-1175166-640.jpg" />
+            <div class='text-block anim slide-top slide'>THE DESIGNER COLLECTION</div>
+          </div>
+          <div class='container'>
+          <img id='img3' class='anim slide-top anim slide-top' src="https://image.ibb.co/gFWg0A/photography-1281757-640.jpg" />
+            <div class='text-block anim slide-top'>THE CASUAL COLLECTION</div>
+          </div>
+       </div>
+      </section>
+    )
+  }
+}
+
+
+//Wrapping up App together____________________________________________________________
+class App extends React.Component{
+  render() {
+    return(
+      <div>
+        <Navigation />
+        <HomePage />
+        <Durability />
+        <Collection />
+        <Footer />
+      </div>
+    )
+  }
+}
+
+ReactDOM.render(<App/>, document.getElementById('app'));
+
+
+
+//jQuery trigger animation when in view_____________________________
+var $animation_elements = $('.anim');
+var $window = $(window);
+
+function check_if_in_view() {
+  var window_height = $window.height();
+  var window_top_position = $window.scrollTop();
+  var window_bottom_position = (window_top_position + window_height);
+ 
+  $.each($animation_elements, function() {
+    var $element = $(this);
+    var element_height = $element.outerHeight();
+    var element_top_position = $element.offset().top;
+    var element_bottom_position = (element_top_position + element_height);
+ 
+    //check to see if this current container is within viewport
+    if ((element_bottom_position >= window_top_position) &&
+        (element_top_position <= window_bottom_position)) {
+      $element.addClass('in-view');
+      
+    } else {
+      $element.removeClass('in-view');
+    }
+  });
+}
+
+$window.on('scroll resize', check_if_in_view);
+
+
+//------------------------------------------------------------------
+
+//--- DEFINE a reusable animation function: ---//
+function scrollThere(targetElement, speed) {
+  // initiate an animation to a certain page element:
+  $('html, body').stop().animate(
+    { scrollTop: targetElement.offset().top }, // move window so target element is at top of window
+    speed, // speed in milliseconds
+    'swing' // easing
+  ); // end animate
+} // end scrollThere function definition
+
+//--- START SCROLL EVENTS ---//
+// detect a mousewheel event (note: relies on jquery mousewheel plugin):
+$(window).on('mousewheel', function (e) {
+
+  // get Y-axis value of each div:
+  var div1y = $('#home').offset().top,
+      div2y = $('#durability').offset().top,
+      div3y = $('#collection').offset().top,
+      div4y = $('#footer').offset().top,
+      // get window's current scroll position:
+      lastScrollTop = $(this).scrollTop(),
+      // for getting user's scroll direction:
+      scrollDirection,
+      // for determining the previous and next divs to scroll to, based on lastScrollTop:
+      targetUp,
+      targetDown,
+      // for determining which of targetUp or targetDown to scroll to, based on scrollDirection:
+      targetElement;
+
+
+  // get scroll direction:
+  if ( e.deltaY > 0 ) {
+    scrollDirection = 'up';
+  } else if ( e.deltaY <= 0 ) {
+    scrollDirection = 'down';
+  } // end if
+
+   
+  // prevent default behavior (page scroll):
+  e.preventDefault();
+ 
+
+  // condition: determine the previous and next divs to scroll to, based on lastScrollTop:
+  if (lastScrollTop === div1y) {
+    targetUp = $('#home');
+    targetDown = $('#durability');
+  } else if (lastScrollTop === div2y) {
+    targetUp = $('#home');
+    targetDown = $('#collection');
+  } else if (lastScrollTop === div3y) {
+    targetUp = $('#durability');
+    targetDown = $('#footer');
+  }else if (lastScrollTop === div4y) {
+    targetUp = $('#collection');
+    targetDown = $('#footer');
+  }else if (lastScrollTop < div2y) {
+    targetUp = $('#home');
+    targetDown = $('#durability');
+  } else if (lastScrollTop < div3y) {
+    targetUp = $('#durability');
+    targetDown = $('#collection');
+  } else if (lastScrollTop < div4y) {
+    targetUp = $('#collection');
+    targetDown = $('#footer');
+  } else if (lastScrollTop > div4y) {
+    targetUp = $('#footer');
+    targetDown = $('#footer');
+  } // end else if
+  // condition: determine which of targetUp or targetDown to scroll to, based on scrollDirection:
+  if (scrollDirection === 'down') {
+    targetElement = targetDown;
+       
+  } else if (scrollDirection === 'up') {
+    targetElement = targetUp;
+  } // end else if
+  // scroll smoothly to the target element:
+  
+  scrollThere(targetElement, 1000);
+
+}); // end on mousewheel event
+//--- END SCROLL EVENTS ---//
+
+
+
+
+
